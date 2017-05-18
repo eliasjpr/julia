@@ -1417,6 +1417,56 @@ function LibGit2.set_remote_url(path::AbstractString, url::AbstractString; remot
     LibGit2.set_remote_url(path, remote, url)
 end
 
+# PR #21956
+# This mimics the structure as it was defined in Base to avoid directly breaking code
+# that assumes this structure
+module DFT
+    for f in [:bfft, :bfft!, :brfft, :dct, :dct!, :fft, :fft!, :fftshift, :idct, :idct!,
+              :ifft, :ifft!, :ifftshift, :irfft, :plan_bfft, :plan_bfft!, :plan_brfft,
+              :plan_dct, :plan_dct!, :plan_fft, :plan_fft!, :plan_idct, :plan_idct!,
+              :plan_ifft, :plan_ifft!, :plan_irfft, :plan_rfft, :rfft]
+        @eval begin
+            function $f(args...; kwargs...)
+                error($f, " has been moved to the package FFTW.jl.\n",
+                      "Run `Pkg.add(\"FFTW\")` to install FFTW then run `using FFTW` ",
+                      "to load it.")
+            end
+            export $f
+        end
+    end
+    module FFTW
+        for f in [:r2r, :r2r!, :plan_r2r, :plan_r2r!]
+            @eval begin
+                function $f(args...; kwargs...)
+                    error($f, " has been moved to the package FFTW.jl.\n",
+                          "Run `Pkg.add(\"FFTW\")` to install FFTW then run `using FFTW` ",
+                          "to load it.")
+                end
+                export $f
+            end
+        end
+    end
+    export FFTW
+end
+using .DFT
+for f in names(DFT)
+    @eval export $f
+end
+module DSP
+    for f in [:conv, :conv2, :deconv, :filt, :filt!, :xcorr]
+        @eval begin
+            function $f(args...; kwargs...)
+                error($f, " has been moved to the package DSP.jl.\n",
+                      "Run `Pkg.add(\"DSP\")` to install DSP then run `using DSP` ",
+                      "to load it.")
+            end
+            export $f
+        end
+    end
+end
+using .DSP
+export conv, conv2, deconv, filt, filt!, xcorr
+
 # END 0.7 deprecations
 
 # BEGIN 1.0 deprecations
