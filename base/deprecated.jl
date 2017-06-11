@@ -1417,6 +1417,20 @@ function LibGit2.set_remote_url(path::AbstractString, url::AbstractString; remot
     LibGit2.set_remote_url(path, remote, url)
 end
 
+function replace(s::AbstractString, pat, f, n::Integer)
+    if n <= 0
+        depwarn(string("`replace(s, pat, r, count)` with `count <= 0` is deprecated, use ",
+                       "`replace(s, pat, r, typemax(Int))` or replace(s, pat, r)` instead"),
+                :replace)
+        Base.replace(s, pat, f)
+    else
+        Base.replace_new(String(s), pat, f, Int(n))
+    end
+end
+
+
+
+
 # END 0.7 deprecations
 
 # BEGIN 1.0 deprecations

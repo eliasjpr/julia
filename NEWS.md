@@ -85,6 +85,9 @@ Deprecated or removed
     which now require a module argument.
     And it caused the bugfix of other default arguments to use the Main module (including `whos`, `which`).
 
+  * The method `replace(s::AbstractString, pat, r, count)` with `count <= 0` is deprecated
+    in favor of `replace(s::AbstractString, pat, r, typemax(Int))` ([#22325]).
+
 
 Julia v0.6.0 Release Notes
 ==========================
