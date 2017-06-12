@@ -1026,7 +1026,11 @@ bool LateLowerGCFrame::CleanupIR(Function &F) {
                 Type *T_pprjlvalue = T_prjlvalue->getPointerTo();
                 ArrayType *AT = ArrayType::get(T_prjlvalue, nframeargs);
                 Instruction *StartOfF = &*(F.getEntryBlock().begin());
-                Value *Frame = new AllocaInst(AT, "", StartOfF);
+                Value *Frame = new AllocaInst(AT,
+#if JL_LLVM_VERSION >= 50000
+                  0,
+#endif
+                  "", StartOfF);
                 Value *Decayed = new BitCastInst(Frame, T_pprjlvalue, "", StartOfF);
                 int slot = 0;
                 IRBuilder<> Builder (CI);
