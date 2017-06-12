@@ -73,8 +73,9 @@ void jl_write_compiler_output(void)
             }
         }
 
-        if (jl_options.outputo || jl_options.outputbc)
+        if (jl_options.outputo || jl_options.outputbc || jl_options.outputunoptbc)
             jl_dump_native(jl_options.outputbc,
+                           jl_options.outputunoptbc,
                            jl_options.outputo,
                            (const char*)s->buf, (size_t)s->size);
     }
